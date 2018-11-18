@@ -146,14 +146,23 @@ class Predictor(object):
         """
         predictions = []
 
-        reader = csv.DictReader(samples, delimiter=",", quotechar='"')
+        # input when evaluating is a list
+        if type(samples) == list:
+            for string in samples:
+                if label_only:
+                    predictions.append(self.pipeline.predict([string])[0])
+                else:
+                    predictions.append((string, self.pipeline.predict([string])[0]))
 
-        for row in reader:
-            string = row["Text"]
-            if label_only:
-                predictions.append(self.pipeline.predict([string])[0])
-            else:
-                predictions.append((string, self.pipeline.predict([string])[0]))
+        # input when predicting is a csv
+        else:
+            reader = csv.DictReader(samples, delimiter=",", quotechar='"')
+            for row in reader:
+                string = row["Text"]
+                if label_only:
+                    predictions.append(self.pipeline.predict([string])[0])
+                else:
+                    predictions.append((string, self.pipeline.predict([string])[0]))
 
         return predictions
 
