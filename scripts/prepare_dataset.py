@@ -55,7 +55,7 @@ def sample(iterator, k, targetdir):
             else:
                 m = random.randint(0,t)
                 if m < k*2:
-                    training.write(sent)
+                    training.write(testdev[m])
                     testdev[m] = sent
                 else:
                     training.write(sent)
